@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="420" height="125" alt="Логотип Blood с красной каплей" src="https://github.com/user-attachments/assets/1007a9d2-c357-434d-9424-00dddab17aa9" />
+  <img width="420" height="125" alt="logo" src="https://github.com/user-attachments/assets/fb4db587-388a-40f4-af0e-35578a47a923" />
 </p>
 
 <p align="center">
