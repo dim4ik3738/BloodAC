@@ -1,7 +1,11 @@
-<p align="center">
-  <img width="420" height="125" alt="logo" src="https://github.com/user-attachments/assets/fb4db587-388a-40f4-af0e-35578a47a923" />
-</p>
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/logo-dark.png">
+    <img alt="BloodAC" src=".github/assets/logo-light.png" width="420">
+  </picture>
 
-<p align="center">
-  An AI-powered, free and open-source anti-cheat for Minecraft servers.
-</p>
+  <p>
+    AI anticheat for Minecraft servers: neural networks catch KillAura, aim assist and triggerbot.<br>
+    Paper, Spigot, 1.16.5–1.21
+  </p>
+</div>
