@@ -66,7 +66,7 @@ All commands start with `/bloodac`.
 | --- | --- |
 | `monitor on/off` | Show all AI percentages for every player |
 | `monitor <player> on/off` | Show them for one player |
-| `prob [aim/attack] on/off` | Show percentage and buffer above your hotbar |
+| `prob on/off` | Show percentage and buffer above your hotbar |
 | `predictHologram on/off` | Holograms over suspects (up to 20 blocks) |
 | `suspectsMenu` | Menu of online suspects, sorted by suspicion. LMB: teleport, RMB: details |
 | `suspectsMenu <player>` | Full info and prediction history for any player |
