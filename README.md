@@ -28,7 +28,7 @@ BloodAC is a machine-learning anti-cheat for combat. The plugin watches how play
 
 ## Detections
 
-| Check | What it catches |
+| Check | What it detects |
 | --- | --- |
 | **Aim** | Aim assist, soft-aim and neural-rotation cheats |
 | **Attack** | Killaura and triggerbot |
