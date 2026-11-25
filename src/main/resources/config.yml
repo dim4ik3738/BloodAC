@@ -1,0 +1,170 @@
+# Language: name of a file from plugins/BloodAC/lang without .yml (en, ru or your own, e.g. uk)
+language: en
+
+# Key for the anticheat to work
+Key: enter your key here
+
+Hologram:
+  # true = the hologram (aim / attack / ping) is always shown above every player, even when everything is 0%
+  # false = the hologram is shown only above players who match the conditions from the Suspects section below
+  alwaysShow: false
+
+# Who gets into the suspects menu (/bloodac suspectsMenu) and, when Hologram.alwaysShow is false, gets a hologram
+# a player is added if the Aim or the Attack condition below is met
+# every condition: the average of the model predictions (in %) over the last "predictions" predictions is ABOVE the threshold
+# a small predictions value (e.g. 10) reacts fast (a few seconds of fighting), a large one (e.g. 1000) is a long-term average and is much more stable
+# predictions: how many last predictions to average (1 - 1000)
+Suspects:
+  Aim:
+    predictions: 10
+    threshold: 25
+  Attack:
+    predictions: 10
+    threshold: 25
+
+Hiders:
+  # a cheater will see a custom name instead of the real name of items lying on the ground
+  spoofItemsName: true
+  itemName: BloodAC
+  # a cheater will see this text instead of the real name of the item in other players' hands (main hand and off hand)
+  spoofHeldItemName: true
+  heldItemName: BloodAC
+  # a cheater will not be able to get a player's gamemode, everyone will be shown as being in creative
+  gameMode: true
+  # hides player health so cheaters cannot see it
+  hp: true
+  # a cheater will not be able to get the effects of other players
+  effects: true
+  # a cheater will not be able to get the item count in other players' inventories, it will always show 64
+  itemsCount: true
+
+# Punishments
+# can the anticheat punish players?
+canPunish: true
+# command used to punish a player
+punishCommand: kick %player% §f[§cBloodAC§f] > Use of §ccheats
+# kill the player after the punishment?
+killPlayer: true
+# play the punishment animation (levitation and particles) before the punishment?
+# false = no animation, the player is punished instantly: killPlayer is applied and punishCommand is executed right away
+# levitation time and particle color work only when this is true
+punishAnimation: true
+# how long the levitation lasts, in ticks (20 ticks = 1 second)
+# the player is punished (killPlayer + punishCommand) when the levitation ends
+punishLevitationTicks: 40
+# color of the animation particles in RGB: red, green, blue (0-255 each)
+punishParticleColor: 255, 0, 0
+# sounds of the punishment (heard by the player and by everyone nearby)
+# sound name: a key as in the /playsound command (entity.wither.spawn) or a Bukkit name (ENTITY_WITHER_SPAWN)
+# write it without quotes
+punishSounds:
+  # played first, right at the start of the punishment (works even when punishAnimation is false)
+  start:
+    enabled: false
+    name: block.enchantment_table.use
+    volume: 1.0
+    pitch: 1.0
+  # played after the animation ends, right before killPlayer and punishCommand (only when punishAnimation is true)
+  end:
+    enabled: false
+    name: entity.lightning_bolt.thunder
+    volume: 1.0
+    pitch: 1.0
+
+# Other
+# Number of decimal places in all numbers (e.g. 1 -> 0.5, 2 -> 0.52)
+decimalPlaces: 1
+
+Checks:
+  Aim:
+    # check of the player by an ML model for aim assist / killaura usage
+    # enable this check?
+    enabled: true
+    # will the anticheat punish the player for this check?
+    canPunish: true
+
+    # buffer settings
+    # the defaults are optimal, if you do not understand them it is better not to touch them.
+    # if you tune the buffer so that it punishes players faster, you raise the chance of false positives
+
+    # by how much the buffer decreases at MOST
+    # it is fully subtracted only when the model prediction is exactly 0%
+    # the closer the prediction is to 10%, the less is subtracted (linearly), at 10% and above it is already 0
+    # example with value 1: 0% -> -1, 5% -> -0.5, 10% -> 0
+    bufferDecrease: 1
+    # by how much the buffer increases at MOST
+    # it is fully added only when the model prediction is exactly 100%
+    # the closer the prediction is to 75%, the less is added (linearly), at 75% and below it is already 0
+    # example with value 5: 100% -> +5, 87.5% -> +2.5, 75% -> 0
+    # between 10% and 75% the buffer does NOT change
+    bufferIncrease: 5
+
+    # buffer actions: what to do when the buffer BECOMES GREATER than a value (goes from the value or below to above it)
+    # e.g. with 40 the actions run when the buffer becomes 40.1 or more, exactly 40 is not enough
+    # format: a whole number, below it a list of actions. You can add as many values and actions as you want
+    # available actions:
+    #   flag                - alert for staff: "player failed Aim" (click to teleport)
+    #   punish              - punish the player (animation / killPlayer / punishCommand, respects canPunish)
+    #   alert: lang:<key>   - message to everyone with the BloodAC.alerts permission, the text is taken from the language file (follows the plugin language)
+    #   command: <command>  - run any command from the console
+    #   sound: <name> [volume] [pitch] - play a sound only to players with the BloodAC.alerts permission
+    #                       name is a key as in /playsound (entity.experience_orb.pickup) or a Bukkit name (ENTITY_EXPERIENCE_ORB_PICKUP)
+    #                       volume and pitch are optional (default 1.0), pitch 0.5 - 2.0
+    # placeholders for alert texts from the language file and for command: {player} (or %player%), {check}, {buffer}
+    # Put alert / command texts in quotes
+    # the buffer is reset to 0 after the HIGHEST value from this list is exceeded, so it can fill up again
+    # to punish later or earlier just change the number, e.g. 30 or 50
+    bufferActions:
+      20:
+        - "alert: lang:alert.suspicious"
+        #- "sound: block.note_block.harp 1.0 1.5"
+      40:
+        - flag
+        - punish
+        #- "sound: block.note_block.bass 1.0 1.0"
+  Attack:
+    # check of the player by an ML model for triggerbot/killaura usage
+    # enable this check?
+    enabled: true
+    # will the anticheat punish the player for this check?
+    canPunish: true
+
+    # buffer settings
+    # the defaults are optimal, if you do not understand them it is better not to touch them.
+    # if you tune the buffer so that it punishes players faster, you raise the chance of false positives
+
+    # by how much the buffer decreases at MOST
+    # it is fully subtracted only when the model prediction is exactly 0%
+    # the closer the prediction is to 10%, the less is subtracted (linearly), at 10% and above it is already 0
+    # example with value 10: 0% -> -10, 5% -> -5, 10% -> 0
+    bufferDecrease: 1
+    # by how much the buffer increases at MOST
+    # it is fully added only when the model prediction is exactly 100%
+    # the closer the prediction is to 75%, the less is added (linearly), at 75% and below it is already 0
+    # example with value 20: 100% -> +20, 87.5% -> +10, 75% -> 0
+    # between 10% and 75% the buffer does NOT change
+    bufferIncrease: 5
+
+    # buffer actions: what to do when the buffer BECOMES GREATER than a value (goes from the value or below to above it)
+    # e.g. with 40 the actions run when the buffer becomes 40.1 or more, exactly 40 is not enough
+    # format: a whole number, below it a list of actions. You can add as many values and actions as you want
+    # available actions:
+    #   flag                - alert for staff: "player failed Attack"
+    #   punish              - punish the player (animation / killPlayer / punishCommand, respects canPunish)
+    #   alert: lang:<key>   - message to everyone with the BloodAC.alerts permission, the text is taken from the language file (follows the plugin language)
+    #   command: <command>  - run any command from the console
+    #   sound: <name> [volume] [pitch] - play a sound only to players with the BloodAC.alerts permission
+    #                       name is a key as in /playsound (entity.experience_orb.pickup) or a Bukkit name (ENTITY_EXPERIENCE_ORB_PICKUP)
+    #                       volume and pitch are optional (default 1.0), pitch 0.5 - 2.0
+    # placeholders for alert texts from the language file and for command: {player} (or %player%), {check}, {buffer}
+    # Put alert / command texts in quotes
+    # the buffer is reset to 0 after the HIGHEST value from this list is exceeded, so it can fill up again
+    # to punish later or earlier just change the number, e.g. 30 or 50
+    bufferActions:
+      5:
+        - "alert: lang:alert.suspicious"
+        #- "sound: block.note_block.harp 1.0 1.5"
+      10:
+        - flag
+        - punish
+        #- "sound: block.note_block.bass 1.0 1.0"

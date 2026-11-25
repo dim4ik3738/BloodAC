@@ -1,0 +1,42 @@
+name: BloodAC
+version: '${version}'
+main: me.dim4ik.BloodAC
+api-version: '1.16'
+
+commands:
+  bloodac:
+
+permissions:
+  BloodAC.alerts:
+    description: "Receive anticheat alerts"
+    default: op
+
+  BloodAC.reload:
+    description: "Access to the /bloodac reload command"
+    default: op
+
+  BloodAC.prob:
+    description: "Access to the /bloodac prob command"
+    default: op
+
+  BloodAC.canPunish:
+    description: "Access to the /bloodac canPunish command"
+    default: op
+
+  BloodAC.monitor:
+    description: "Access to the /bloodac monitor command"
+    default: op
+
+  BloodAC.acPunish:
+    description: "Access to the /bloodac acPunish command"
+    default: op
+
+  BloodAC.suspectsMenu:
+    description: "Access to the /bloodac suspectsMenu command"
+    default: op
+
+  BloodAC.predictHologram:
+    description: "Access to the /bloodac predictHologram command"
+    default: op
+
+depend: [packetevents]

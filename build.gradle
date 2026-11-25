@@ -1,0 +1,68 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'me.dim4ik'
+version = project.property('version')
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'https://oss.sonatype.org/content/groups/public/' }
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+    maven { url = 'https://repo.codemc.io/repository/maven-releases/' }
+}
+
+dependencies {
+    compileOnly 'com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT'
+
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    compileOnly 'com.github.retrooper:packetevents-spigot:2.12.2'
+
+    compileOnly 'org.jetbrains:annotations:24.1.0'
+
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'net.kyori:adventure-text-serializer-legacy:4.26.1'
+
+    compileOnly 'io.netty:netty-buffer:4.1.115.Final'
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset = 'UTF-8'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
+
+shadowJar {
+    archiveBaseName.set('BloodAC')
+    archiveVersion.set(version.toString())
+    archiveClassifier.set('')
+
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+}
+
+build {
+    dependsOn shadowJar
+}
+
+jar {
+    enabled = false
+}
